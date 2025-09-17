@@ -12,11 +12,9 @@
     "require": {},
     "autoload": {
         "psr-4": {
-            "ProductPackage\\": "src/",
-            "ProductPackage\\Http\\Controllers\\": "src/Http/Controllers/",
-            "ProductPackage\\Http\\Controllers\\API\\": "src/Http/Controllers/API/",
-            "ProductPackage\\Http\\Middleware\\": "src/Http/Middleware/",
-            "ProductPackage\\Models\\": "src/Models/"
+
+            "ProductPackage\\": "src/"
+
         }
     },
     "extra": {
