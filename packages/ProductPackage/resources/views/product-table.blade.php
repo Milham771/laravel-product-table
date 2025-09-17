@@ -3,11 +3,13 @@
 <head>
     <title>Product Table</title>
     <script src="https://cdn.jsdelivr.net/npm/ag-grid-community/dist/ag-grid-community.min.noStyle.js"></script>
+
     <style>
         .ag-theme-alpine {
             height: 500px;
             width: 100%;
         }
+
         .toolbar {
             margin-bottom: 10px;
         }
@@ -23,10 +25,12 @@
         .toolbar button.delete {
             background-color: #f44336;
         }
+
     </style>
 </head>
 <body>
     <h1>Product Table</h1>
+
     <p>This is an example implementation of AG Grid with CRUD operations. You can customize this view to work with any data structure.</p>
     
     <!-- Toolbar -->
@@ -35,10 +39,12 @@
         <button id="deleteProductButton" class="delete">Delete Selected</button>
     </div>
     
+
     <div id="myGrid" class="ag-theme-alpine"></div>
 
     <script>
         // Define column headers
+
         const columnDefs = [
             { headerName: 'ID', field: 'id', sortable: true, filter: true, editable: false },
             { headerName: 'Name', field: 'name', sortable: true, filter: true, editable: true },
@@ -50,6 +56,7 @@
         ];
 
         // Initialize grid options
+
         const gridOptions = {
             defaultColDef: {
                 editable: true,
@@ -57,6 +64,7 @@
                 filter: true
             },
             columnDefs: columnDefs,
+
             rowData: [],
             rowSelection: {
                 mode: 'multiRow',
@@ -70,10 +78,12 @@
                 // Handle cell editing - automatically save changes
                 updateProduct(event.data);
             }
+
         };
 
         // Create grid
         const eGridDiv = document.querySelector('#myGrid');
+
         const gridApi = agGrid.createGrid(eGridDiv, gridOptions);
 
         // Fetch data from API
@@ -205,6 +215,7 @@
                 fetchProducts();
             });
         }
+
     </script>
     
     <h2>How to Customize This Component</h2>
