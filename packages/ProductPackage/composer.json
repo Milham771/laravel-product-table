@@ -1,0 +1,31 @@
+{
+    "name": "your-vendor/product-package",
+    "description": "Laravel package for managing product data with CRUD operations, AG Grid integration, and CORS support.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Your Name",
+            "email": "your.email@example.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "ProductPackage\\": "src/",
+            "ProductPackage\\Http\\Controllers\\": "src/Http/Controllers/",
+            "ProductPackage\\Http\\Controllers\\API\\": "src/Http/Controllers/API/",
+            "ProductPackage\\Http\\Middleware\\": "src/Http/Middleware/",
+            "ProductPackage\\Models\\": "src/Models/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "ProductPackage\\ProductServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
