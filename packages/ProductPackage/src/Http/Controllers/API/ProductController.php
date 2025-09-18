@@ -4,16 +4,9 @@ namespace ProductPackage\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use ProductPackage\Models\Product;
 
-/**
- * Product API Controller
- * 
- * This controller provides optional API endpoints for managing products.
- * These endpoints only work if you use the provided migrations and models.
- * 
- * If you have your own database structure, you should create your own API endpoints.
- */
 class ProductController extends Controller
 {
     /**
@@ -23,8 +16,13 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::all();
-        return response()->json($products);
+        try {
+            $products = Product::all();
+            return response()->json($products);
+        } catch (\Exception $e) {
+            Log::error('Error fetching products: ' . $e->getMessage(), ['exception' => $e]);
+            return response()->json(['error' => 'Failed to fetch products', 'message' => $e->getMessage()], 500);
+        }
     }
 
     /**
@@ -35,15 +33,20 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'price' => 'required|numeric|min:0',
-            'quantity' => 'required|integer|min:0',
-        ]);
+        try {
+            $validatedData = $request->validate([
+                'name' => 'required|string|max:255',
+                'description' => 'nullable|string',
+                'price' => 'required|numeric|min:0',
+                'quantity' => 'required|integer|min:0',
+            ]);
 
-        $product = Product::create($validatedData);
-        return response()->json($product, 201);
+            $product = Product::create($validatedData);
+            return response()->json($product, 201);
+        } catch (\Exception $e) {
+            Log::error('Error creating product: ' . $e->getMessage(), ['exception' => $e]);
+            return response()->json(['error' => 'Failed to create product', 'message' => $e->getMessage()], 500);
+        }
     }
 
     /**
@@ -54,27 +57,56 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        return response()->json($product);
+        try {
+            return response()->json($product);
+        } catch (\Exception $e) {
+            Log::error('Error fetching product: ' . $e->getMessage(), ['exception' => $e]);
+            return response()->json(['error' => 'Failed to fetch product', 'message' => $e->getMessage()], 500);
+        }
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \ProductPackage\Models\Product  $product
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Product $product)
+    public function update(Request $request, $id)
     {
-        $validatedData = $request->validate([
-            'name' => 'sometimes|required|string|max:255',
-            'description' => 'nullable|string',
-            'price' => 'sometimes|required|numeric|min:0',
-            'quantity' => 'sometimes|required|integer|min:0',
-        ]);
+        try {
+            $product = Product::find($id);
+            
+            if (!$product) {
+                Log::error('Product not found', ['product_id' => $id]);
+                return response()->json(['error' => 'Product not found'], 404);
+            }
 
-        $product->update($validatedData);
-        return response()->json($product);
+            $validatedData = $request->validate([
+                'name' => 'sometimes|required|string|max:255',
+                'description' => 'nullable|string',
+                'price' => 'sometimes|required|numeric|min:0',
+                'quantity' => 'sometimes|required|integer|min:0',
+            ]);
+
+            $product->update($validatedData);
+            $product->refresh();
+
+            $productData = [
+                'id' => $product->id,
+                'name' => $product->name,
+                'description' => $product->description,
+                'price' => $product->price,
+                'quantity' => $product->quantity,
+                'created_at' => $product->created_at,
+                'updated_at' => $product->updated_at,
+            ];
+
+            return response()->json($productData);
+        } catch (\Exception $e) {
+            Log::error('Error updating product: ' . $e->getMessage(), ['exception' => $e]);
+            return response()->json(['error' => 'Failed to update product', 'message' => $e->getMessage()], 500);
+        }
     }
 
     /**
@@ -85,7 +117,15 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        $product->delete();
-        return response()->json(null, 204);
+        try {
+            $productId = $product->id;
+            $product->delete();
+            
+            Log::info('Product deleted successfully', ['product_id' => $productId]);
+            return response()->json(null, 204);
+        } catch (\Exception $e) {
+            Log::error('Error deleting product: ' . $e->getMessage(), ['exception' => $e]);
+            return response()->json(['error' => 'Failed to delete product', 'message' => $e->getMessage()], 500);
+        }
     }
 }
