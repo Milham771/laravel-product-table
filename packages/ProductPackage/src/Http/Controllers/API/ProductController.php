@@ -9,11 +9,6 @@ use ProductPackage\Models\Product;
 
 class ProductController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         try {
@@ -25,12 +20,6 @@ class ProductController extends Controller
         }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         try {
@@ -49,12 +38,6 @@ class ProductController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \ProductPackage\Models\Product  $product
-     * @return \Illuminate\Http\Response
-     */
     public function show(Product $product)
     {
         try {
@@ -65,13 +48,6 @@ class ProductController extends Controller
         }
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         try {
@@ -109,20 +85,15 @@ class ProductController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \ProductPackage\Models\Product  $product
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Product $product)
+    public function destroy($id)
     {
         try {
-            $productId = $product->id;
+            $product = Product::findOrFail($id);
             $product->delete();
-            
-            Log::info('Product deleted successfully', ['product_id' => $productId]);
-            return response()->json(null, 204);
+
+            Log::info('Product deleted successfully', ['product_id' => $id]);
+
+            return response()->json(['message' => 'Product deleted successfully', 'product' => $product], 200);
         } catch (\Exception $e) {
             Log::error('Error deleting product: ' . $e->getMessage(), ['exception' => $e]);
             return response()->json(['error' => 'Failed to delete product', 'message' => $e->getMessage()], 500);
