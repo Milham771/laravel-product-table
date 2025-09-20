@@ -1,6 +1,6 @@
 # Laravel Product Table Package
 
-Laravel package for managing product data with CRUD operations and AG Grid integration.
+Laravel package for managing product data with CRUD operations, AG Grid integration, and CORS support.
 
 ## Installation
 
@@ -42,7 +42,7 @@ To use the provided view:
 
 The AG Grid component in this package is designed to be highly flexible and adaptable to various data structures:
 
-1. **Column Definitions**: 
+1. **Column Definitions**:
    - The component uses a JavaScript array for column definitions.
    - You can easily modify this array to match the fields in your database table.
    - Each column can have properties like `headerName`, `field`, `sortable`, `filter`, etc.
@@ -90,6 +90,40 @@ The package provides the following API endpoints for product management:
 - `DELETE /products/{id}` - Delete a specific product
 
 Note: These endpoints are provided for convenience and only work if you use the provided migrations and models. You can choose to use your own API endpoints with the AG Grid component.
+
+### CORS Configuration
+
+The package includes a CORS middleware that can be configured to allow requests from specific origins.
+
+To use the CORS middleware:
+1. Configure the `config/product-package.php` file in your Laravel application to add your allowed origins:
+   ```php
+   'cors' => [
+       'allowed_origins' => [
+           'http://localhost:3000',
+           'https://yourdomain.com',
+       ],
+   ],
+   ```
+
+2. The CORS middleware is automatically applied to all API routes in the package.
+
+### Managing CORS Origins
+
+You can manage CORS origins using the Artisan command:
+
+```bash
+# List all allowed origins
+php artisan product-package:cors list
+
+# Add a new allowed origin
+php artisan product-package:cors add https://example.com
+
+# Remove an allowed origin
+php artisan product-package:cors remove https://example.com
+```
+
+Note: You must have the config file at `config/product-package.php` with the CORS configuration.
 
 ## Customization
 
