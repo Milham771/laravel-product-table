@@ -1,6 +1,6 @@
 {
     "name": "your-vendor/product-package",
-    "description": "Laravel package for managing product data with CRUD operations, AG Grid integration, and CORS support.",
+    "description": "Laravel package for managing product data with CRUD operations and AG Grid integration.",
     "type": "library",
     "license": "MIT",
     "authors": [

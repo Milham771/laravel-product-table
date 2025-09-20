@@ -49,8 +49,8 @@
             { headerName: 'Description', field: 'description', sortable: true, filter: true, editable: true },
             { headerName: 'Price', field: 'price', sortable: true, filter: true, editable: true },
             { headerName: 'Quantity', field: 'quantity', sortable: true, filter: true, editable: true },
-            { headerName: 'Created At', field: 'created_at', sortable: true, filter: true, editable: false },
-            { headerName: 'Updated At', field: 'updated_at', sortable: true, filter: true, editable: false }
+            { headerName: 'Created At', field: 'created_at_human', sortable: true, filter: true, editable: false },
+            { headerName: 'Updated At', field: 'updated_at_human', sortable: true, filter: true, editable: false }
         ];
 
         const gridOptions = {
@@ -80,7 +80,7 @@
         const gridApi = agGrid.createGrid(eGridDiv, gridOptions);
 
         function fetchProducts() {
-            fetch('/api/products')
+            fetch('/products')
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
@@ -105,7 +105,7 @@
                 quantity: 0
             };
             
-            fetch('/api/products', {
+            fetch('/products', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -139,7 +139,7 @@
             
             if (confirm(`Are you sure you want to delete ${selectedRows.length} product(s)?`)) {
                 const deletePromises = selectedRows.map(row => {
-                    return fetch(`/api/products/${row.id}`, {
+                    return fetch(`/products/${row.id}`, {
                         method: 'DELETE',
                         headers: {
                             'Content-Type': 'application/json',
@@ -190,7 +190,7 @@
                 quantity: product.quantity
             };
             
-            fetch(`/api/products/${product.id}`, {
+            fetch(`/products/${product.id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

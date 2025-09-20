@@ -2,7 +2,7 @@
 
 namespace ProductPackage\Http\Controllers;
 
-use Illuminate\Routing\Controller;
+use App\Http\Controllers\Controller;
 
 class ProductTableController extends Controller
 {

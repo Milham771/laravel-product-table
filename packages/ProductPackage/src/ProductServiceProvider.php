@@ -11,11 +11,7 @@ class ProductServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        if (file_exists(__DIR__.'/../config/product-package.php')) {
-            $this->mergeConfigFrom(
-                __DIR__.'/../config/product-package.php', 'product-package'
-            );
-        }
+        //
     }
 
     /**
@@ -23,28 +19,16 @@ class ProductServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Load migrations
         $this->loadMigrationsFrom(__DIR__.'/../Database/Migrations');
-
-        $this->publishes([
-            __DIR__.'/../resources/views' => resource_path('views/vendor/product-package'),
-        ], 'product-package-views');
-
+        
+        // Load views
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'product-package');
-
-        $this->publishes([
-            __DIR__.'/../config/product-package.php' => config_path('product-package.php'),
-        ], 'product-package-config');
-
-        $this->publishes([
-            __DIR__.'/../Database/Migrations' => database_path('migrations'),
-        ], 'product-package-migrations');
-
+        
+        // Register routes
         if (! $this->app->routesAreCached()) {
             require __DIR__.'/routes/web.php';
-            
-            $this->app['router']->group(['prefix' => 'api'], function () {
-                require __DIR__.'/routes/api.php';
-            });
+            require __DIR__.'/routes/api.php';
         }
     }
 }
