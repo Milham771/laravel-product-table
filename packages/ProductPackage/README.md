@@ -1,6 +1,6 @@
 # Laravel Product Table Package
 
-Laravel package for managing product data with CRUD operations, AG Grid integration, and CORS support.
+Laravel package for managing product data with CRUD operations and AG Grid integration.
 
 ## Installation
 
@@ -9,24 +9,9 @@ Laravel package for managing product data with CRUD operations, AG Grid integrat
    composer require your-vendor/product-package
    ```
 
-2. Publish the migrations (optional, if you want to use the provided table structure):
-   ```bash
-   php artisan vendor:publish --tag=product-package-migrations
-   ```
-   
-3. Run the migrations (only if you published the migrations in step 2):
+2. Run the migrations:
    ```bash
    php artisan migrate
-   ```
-
-4. Publish the views (optional, if you want to customize the AG Grid table):
-   ```bash
-   php artisan vendor:publish --tag=product-package-views
-   ```
-
-5. Publish the config file (optional, if you want to configure CORS):
-   ```bash
-   php artisan vendor:publish --tag=product-package-config
    ```
 
 ## Usage
@@ -97,41 +82,14 @@ fetch('/api/users')
 
 ### API Endpoints
 
-The package provides the following API endpoints for product management (optional):
-- `GET /api/products` - Get all products
-- `POST /api/products` - Create a new product
-- `GET /api/products/{id}` - Get a specific product
-- `PUT /api/products/{id}` - Update a specific product
-- `DELETE /api/products/{id}` - Delete a specific product
+The package provides the following API endpoints for product management:
+- `GET /products` - Get all products
+- `POST /products` - Create a new product
+- `GET /products/{id}` - Get a specific product
+- `PUT /products/{id}` - Update a specific product
+- `DELETE /products/{id}` - Delete a specific product
 
 Note: These endpoints are provided for convenience and only work if you use the provided migrations and models. You can choose to use your own API endpoints with the AG Grid component.
-
-### CORS Configuration
-
-The package includes a CORS middleware that can be configured to allow requests from specific origins.
-
-To use the CORS middleware:
-1. Add it to your API routes:
-   ```php
-   Route::middleware(['product-package.cors'])->group(function () {
-       // Your API routes here
-   });
-   ```
-
-2. Publish the config file and modify the allowed origins:
-   ```bash
-   php artisan vendor:publish --tag=product-package-config
-   ```
-   
-3. Edit the `config/product-package.php` file to add your allowed origins:
-   ```php
-   'cors' => [
-       'allowed_origins' => [
-           'http://localhost:3000',
-           'https://yourdomain.com',
-       ],
-   ],
-   ```
 
 ## Customization
 
