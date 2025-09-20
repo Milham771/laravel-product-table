@@ -3,6 +3,8 @@
 namespace ProductPackage;
 
 use Illuminate\Support\ServiceProvider;
+use ProductPackage\Console\Commands\ManageCorsOriginsCommand;
+use ProductPackage\Http\Middleware\CorsMiddleware;
 
 class ProductServiceProvider extends ServiceProvider
 {
@@ -11,7 +13,6 @@ class ProductServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
     }
 
     /**
@@ -24,6 +25,16 @@ class ProductServiceProvider extends ServiceProvider
         
         // Load views
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'product-package');
+        
+        // Register middleware
+        $this->app['router']->aliasMiddleware('product-package.cors', CorsMiddleware::class);
+        
+        // Register commands
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                ManageCorsOriginsCommand::class,
+            ]);
+        }
         
         // Register routes
         if (! $this->app->routesAreCached()) {
